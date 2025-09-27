@@ -41,27 +41,23 @@ export const checkIn = async(req: Request, res: Response) => {
 
     console.log("Check-in request received:", req.body);
     try{
-        const { employeeName, constructionSiteName, status } = req.body;
+        const { workerId, siteId, status, mode } = req.body;
 
         // Validate input
-        if (!employeeName || !constructionSiteName || !status) {
-            return res.status(400).json({ status: "error", message: "Missing required fields" });
+        if (!workerId || !siteId) {
+            return res.status(400).json({ status: "error", message: "Missing workerId or siteId" });
         }
-
-        // Resolve lookup IDs
-        const workerId = await getRecordIdByName("Worker_Report", "Worker_Name", employeeName);
-        const siteId = await getRecordIdByName("All_Construction_Sites", "Site_Name", constructionSiteName);
 
         console.log("Resolved IDs:", { workerId, siteId });
 
 
         const record = {
             Worker: workerId,
-            Construction_Site: siteId,         // lookup object
+            Construction_Site: siteId,
+            Status: status,
+            Mode: mode,       // lookup object
             Check_In_Time: formatDateTime(new Date()),   // dd-MMM-yyyy HH:mm:ss
             Attendance_Date: formatDate(new Date()),     // dd-MMM-yyyy
-            Status: status,
-            Mode: "Fingerprint",
         };
         console.log("record to be sent", record);
 
