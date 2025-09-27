@@ -3,7 +3,7 @@ import "dotenv/config"
 
 export async function getZohoAccessToken(): Promise<string> {
 
-    const res = await axios.post("https://api.zoho.com/v2/token/token", null, {
+    const res = await axios.post("https://accounts.zoho.com/oauth/v2/token", null, {
 
         params:{
             refresh_token: process.env.REFRESH_TOKEN,
@@ -13,6 +13,7 @@ export async function getZohoAccessToken(): Promise<string> {
         }
     })
 
+    console.log(res);
 
     console.log(res.data.access_token)
 

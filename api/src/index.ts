@@ -1,10 +1,13 @@
 import express , {Request, Response} from "express"
 import "dotenv/config"
+import cors from "cors";
+
 import bodyParser from "body-parser";
-import attendanceRoutes from "./routes/attendace.routes";
+import attendanceRoutes from "./routes/attendance.routes";
 
 const app  = express()
 app.use(bodyParser.json())
+app.use(cors());
 
 const CLIENT_ID = process.env.CLIENT_ID!;
 const CLIENT_SECRET = process.env.CLIENT_SECRET!;
