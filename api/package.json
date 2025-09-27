@@ -4,7 +4,6 @@
   "main": "index.js",
   "scripts": {
     "dev": "ts-node src/index.ts",
-    "prestart": "ls -la dist",
     "build": "tsc",
     "start": "node dist/index.js"
   },
