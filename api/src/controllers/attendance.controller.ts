@@ -86,21 +86,20 @@ export const checkIn = async(req: Request, res: Response) => {
 
 export const checkOut = async (req: Request, res: Response) => {
     try {
-        const { employeeName, status } = req.body;
+        const { workerId,  status, mode } = req.body;
 
         // Validate input
-        if (!employeeName || !status) {
+        if (!workerId || !status) {
             return res.status(400).json({ status: "error", message: "Missing required fields" });
         }
-        // Resolve lookup ID
-        const workerId = await getRecordIdByName("Worker_Report", "Name", employeeName);
+
 
         const record = {
-            Worker: workerId,            // send ID instead of name
-            Check_Out_Time: new Date().toISOString(),
-            Attendance_Date: new Date().toISOString().split("T")[0],
+            Worker: workerId,
             Status: status,
-            Mode: "Fingerprint",
+            Mode: mode,       // lookup object
+            Check_Out_Time: formatDateTime(new Date()),   // dd-MMM-yyyy HH:mm:ss
+            Attendance_Date: formatDate(new Date()),
         };
 
 
