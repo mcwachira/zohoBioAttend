@@ -58,8 +58,8 @@ export const checkIn = async(req: Request, res: Response) => {
             Status: status,
             Mode: mode,       // lookup object
             QR_Code_Scanned:qr_Code_Scanned,
-            Check_In_Time: now.format("HH:mm:ss"),   // ✅ Correct Zoho time format
-            Attendance_Date: now.format("YYYY-MM-DD"), // ✅ Correct Zoho date format
+            Check_In_Time: now.format("dd-MMM-yyyy HH:mm:ss"),   // ✅ Correct Zoho time format
+            Attendance_Date: now.format("dd-MMM-yyyy"), // ✅ Correct Zoho date format
         };
         console.log("record to be sent", record);
 
