@@ -13,7 +13,7 @@ export const getWorkers = async (req: Request, res: Response) => {
                 name: `${w.Worker_Name?.zc_display_value || `${w.Worker_Name?.first_name} ${w.Worker_Name?.last_name}`} (${w.Role})`,
 
             }))
-        console.log("formated data",formatted.qrCode);
+        console.log("formated data",formatted);
         res.status(200).json(formatted)
     }catch(err:any) {
         res.status(500).json({error:err.message})

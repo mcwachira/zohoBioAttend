@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1c450927-ac18-4d0b-a0cb-8f4adfa0c7b1" name="Changes" comment="Made changes to fix deployment issues">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/controllers/worker.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/controllers/worker.controller.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/services/zoho.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/services/zoho.service.ts" afterDir="false" />
-    </list>
+    <list default="true" id="1c450927-ac18-4d0b-a0cb-8f4adfa0c7b1" name="Changes" comment="Made changes to fix some issues" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -83,7 +79,7 @@
       <updated>1758916573364</updated>
       <workItem from="1758916577864" duration="227000" />
       <workItem from="1758916842204" duration="42282000" />
-      <workItem from="1758999962604" duration="17791000" />
+      <workItem from="1758999962604" duration="18135000" />
     </task>
     <task id="LOCAL-00001" summary="Made some changes to the app">
       <option name="closed" value="true" />
@@ -189,7 +185,15 @@
       <option name="project" value="LOCAL" />
       <updated>1759011153671</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Made changes to fix some issues">
+      <option name="closed" value="true" />
+      <created>1759049050426</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1759049050426</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -208,6 +212,7 @@
     <MESSAGE value="Added some routes for the worker and site" />
     <MESSAGE value="Made Some Changes to the api." />
     <MESSAGE value="Made changes to fix deployment issues" />
-    <option name="LAST_COMMIT_MESSAGE" value="Made changes to fix deployment issues" />
+    <MESSAGE value="Made changes to fix some issues" />
+    <option name="LAST_COMMIT_MESSAGE" value="Made changes to fix some issues" />
   </component>
 </project>
