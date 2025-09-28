@@ -66,21 +66,21 @@ export const checkIn = async(req: Request, res: Response) => {
         try {
             // Send record to Zoho
             const zohoResponse = await addFormRecord("Check_In_Form", record);
-            console.log("Zoho response:", zohoResponse.data);
+            console.log("Zoho response:", zohoResponse);
 
             return res.json({ status: "success", record });
         } catch (zohoErr: any) {
             // Log Zoho error and send detailed response
-            console.error("Zoho API error:", zohoErr || zohoErr.message);
+            console.error("Zoho API error:", zohoErr || zohoErr);
 
             return res.status(502).json({
                 status: "error",
                 message: "Failed to send record to Zoho",
-                details: zohoErr.response?.data || zohoErr.message,
+                details: zohoErr.response || zohoErr.message,
             });
         }
     } catch (err: any) {
-        console.error("Server error:", err.message);
+        console.error("Server error:", err);
         return res.status(500).json({ status: "error", message: err.message });
     }
 };
