@@ -41,7 +41,7 @@ export const checkIn = async(req: Request, res: Response) => {
 
     console.log("Check-in request received:", req.body);
     try{
-        const { workerId, siteId, status, mode } = req.body;
+        const { workerId, siteId, status, mode,qr_Code_Scanned } = req.body;
 
         // Validate input
         if (!workerId || !siteId) {
@@ -56,6 +56,7 @@ export const checkIn = async(req: Request, res: Response) => {
             Construction_Site: siteId,
             Status: status,
             Mode: mode,       // lookup object
+            QR_Code_Scanned:qr_Code_Scanned,
             Check_In_Time: formatDateTime(new Date()),   // dd-MMM-yyyy HH:mm:ss
             Attendance_Date: formatDate(new Date()),     // dd-MMM-yyyy
         };
@@ -86,7 +87,7 @@ export const checkIn = async(req: Request, res: Response) => {
 
 export const checkOut = async (req: Request, res: Response) => {
     try {
-        const { workerId,  status, mode } = req.body;
+        const { workerId,  status, mode, qr_Code_Scanned } = req.body;
 
         // Validate input
         if (!workerId || !status) {
@@ -98,6 +99,7 @@ export const checkOut = async (req: Request, res: Response) => {
             Worker: workerId,
             Status: status,
             Mode: mode,       // lookup object
+            QR_Code_Scanned:qr_Code_Scanned,
             Check_Out_Time: formatDateTime(new Date()),   // dd-MMM-yyyy HH:mm:ss
             Attendance_Date: formatDate(new Date()),
         };
