@@ -1,6 +1,6 @@
 import { Request, Response} from "express";
 import {addFormRecord, fetchFormRecords} from "../services/zoho.service";
-import { formatDate, formatDateTime } from "../utils/date.utils";
+import dayjs from "dayjs";
 
 
 async function getRecordIdByName(reportName: string, fieldName: string, value: string) {
@@ -51,14 +51,15 @@ export const checkIn = async(req: Request, res: Response) => {
         console.log("Resolved IDs:", { workerId, siteId });
 
 
+        const now = dayjs();
         const record = {
             Worker: workerId,
             Construction_Site: siteId,
             Status: status,
             Mode: mode,       // lookup object
             QR_Code_Scanned:qr_Code_Scanned,
-            Check_In_Time: formatDateTime(new Date()),   // dd-MMM-yyyy HH:mm:ss
-            Attendance_Date: formatDate(new Date()),     // dd-MMM-yyyy
+            Check_In_Time: now.format("HH:mm:ss"),   // ✅ Correct Zoho time format
+            Attendance_Date: now.format("YYYY-MM-DD"), // ✅ Correct Zoho date format
         };
         console.log("record to be sent", record);
 
@@ -95,13 +96,14 @@ export const checkOut = async (req: Request, res: Response) => {
         }
 
 
+        const now = dayjs();
         const record = {
             Worker: workerId,
             Status: status,
             Mode: mode,       // lookup object
             QR_Code_Scanned:qr_Code_Scanned,
-            Check_Out_Time: formatDateTime(new Date()),   // dd-MMM-yyyy HH:mm:ss
-            Attendance_Date: formatDate(new Date()),
+            Check_Out_Time: now.format("HH:mm:ss"),   // ✅ Correct Zoho time format
+            Attendance_Date: now.format("YYYY-MM-DD"),
         };
 
 

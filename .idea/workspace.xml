@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1c450927-ac18-4d0b-a0cb-8f4adfa0c7b1" name="Changes" comment="Made changes to fix some issues">
+    <list default="true" id="1c450927-ac18-4d0b-a0cb-8f4adfa0c7b1" name="Changes" comment="Made changes to my attendance api">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/src/controllers/attendance.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/controllers/attendance.controller.ts" afterDir="false" />
     </list>
@@ -82,7 +82,7 @@
       <updated>1758916573364</updated>
       <workItem from="1758916577864" duration="227000" />
       <workItem from="1758916842204" duration="42282000" />
-      <workItem from="1758999962604" duration="19516000" />
+      <workItem from="1758999962604" duration="23919000" />
     </task>
     <task id="LOCAL-00001" summary="Made some changes to the app">
       <option name="closed" value="true" />
@@ -204,7 +204,15 @@
       <option name="project" value="LOCAL" />
       <updated>1759049393840</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Made changes to my attendance api">
+      <option name="closed" value="true" />
+      <created>1759051052391</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1759051052391</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -224,6 +232,7 @@
     <MESSAGE value="Made Some Changes to the api." />
     <MESSAGE value="Made changes to fix deployment issues" />
     <MESSAGE value="Made changes to fix some issues" />
-    <option name="LAST_COMMIT_MESSAGE" value="Made changes to fix some issues" />
+    <MESSAGE value="Made changes to my attendance api" />
+    <option name="LAST_COMMIT_MESSAGE" value="Made changes to my attendance api" />
   </component>
 </project>
