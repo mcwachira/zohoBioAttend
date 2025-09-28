@@ -21,7 +21,7 @@ export async function  fetchFormRecords(reportName:string){
                 Authorization: `Zoho-oauthtoken ${token}`,
                 Accept: "application/json",},
         });
-        console.log("Zoho raw response:", JSON.stringify(res.data, null, 2));
+        // console.log("Zoho raw response:", JSON.stringify(res.data, null, 2));
         return res.data.data;
     } catch (err: any) {
         console.error("Fetch error:", err.response?.data || err.message);
@@ -62,6 +62,7 @@ export async function addFormRecord(formName: string, record: Record<string, any
         if (err.response) {
             const status = err.response.status;
             const data = err.response.data;
+            console.log(err.message)
 
             if (status === 404) {
                 throw new Error(
