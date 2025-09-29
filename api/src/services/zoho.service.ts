@@ -49,20 +49,26 @@ export async function addFormRecord(formName: string, record: Record<string, any
             }
         );
 
-        // Zoho can return errors inside a 200 response
-        if (res.data.code === 3000 && res.data.result?.length) {
-            const errors = res.data.result.map((r: any) => r.error).flat();
-            console.error("Zoho field errors:", errors);
-            throw new Error(`Zoho API field errors: ${JSON.stringify(errors)}`);
+        const result = res.data?.data?.[0];
+
+        if (!result) {
+            throw new Error(`Unexpected Zoho response: ${JSON.stringify(res.data)}`);
         }
 
-        console.log("Zoho response:", res.data);
-        return res; // Return full response if needed
+        if (result.code === "SUCCESS") {
+            console.log(`✅ Zoho ${formName} record created:`, result.details);
+            return result.details;
+        }
+
+        if (result.code === "ERROR") {
+            console.error("❌ Zoho field error:", result.message);
+            throw new Error(`Zoho API field error: ${JSON.stringify(result.message)}`);
+        }
+
+        return result;
     } catch (err: any) {
         if (err.response) {
-            const status = err.response.status;
-            const data = err.response.data;
-            console.log(err.message)
+            const { status, data } = err.response;
 
             if (status === 404) {
                 throw new Error(

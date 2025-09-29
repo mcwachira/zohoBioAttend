@@ -52,6 +52,23 @@ export const checkIn = async(req: Request, res: Response) => {
 
 
         const now = dayjs();
+        const today = now.format("DD-MMM-YYYY");
+        // 1️⃣ Check if already checked in today
+        const existing = await fetchFormRecords("Check_In_Form");
+        const alreadyCheckedIn = existing.find(
+            (r: any) =>
+                r.Worker === workerId &&
+                r.Attendance_Date === today &&
+                r.Status === "Check In"
+        );
+
+
+        if (alreadyCheckedIn) {
+            return res.status(400).json({
+                status: "error",
+                message: "Worker already checked in today",
+            });
+        }
         const record = {
             Worker: workerId,
             Construction_Site: siteId,
@@ -59,7 +76,7 @@ export const checkIn = async(req: Request, res: Response) => {
             Mode: mode,       // lookup object
             QR_Code_Scanned:qr_Code_Scanned,
             Check_In_Time: now.format("DD-MMM-YYYY HH:mm:ss"),   // ✅ Correct Zoho time format
-            Attendance_Date: now.format("DD-MMM-YYYY"),
+            Attendance_Date: today
         };
         console.log("record to be sent", record);
 
@@ -97,13 +114,31 @@ export const checkOut = async (req: Request, res: Response) => {
 
 
         const now = dayjs();
+        const today = now.format("DD-MMM-YYYY");
+
+        // 1️⃣ Check if already checked out today
+        const existing = await fetchFormRecords("Check_Out_Form");
+        const alreadyCheckedOut = existing.find(
+            (r: any) =>
+                r.Worker === workerId &&
+                r.Attendance_Date === today &&
+                r.Status === "Check Out"
+        );
+
+
+        if (alreadyCheckedOut) {
+            return res.status(400).json({
+                status: "error",
+                message: "Worker already checked in today",
+            });
+        }
         const record = {
             Worker: workerId,
             Status: status,
             Mode: mode,       // lookup object
             QR_Code_Scanned:qr_Code_Scanned,
             Check_Out_Time: now.format("DD-MMM-YYYY HH:mm:ss"), // ✅ Correct Zoho time format
-            Attendance_Date: now.format("DD-MMM-YYYY"),
+            Attendance_Date:today,
         };
 
 
