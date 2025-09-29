@@ -54,7 +54,7 @@ export const checkIn = async(req: Request, res: Response) => {
         const now = dayjs();
         const today = now.format("DD-MMM-YYYY");
         // 1️⃣ Check if already checked in today
-        const existing = await fetchFormRecords("Check_In_Form");
+        const existing = await fetchFormRecords("Check_In_Form_Report");
         const alreadyCheckedIn = existing.find(
             (r: any) =>
                 r.Worker === workerId &&
@@ -117,7 +117,7 @@ export const checkOut = async (req: Request, res: Response) => {
         const today = now.format("DD-MMM-YYYY");
 
         // 1️⃣ Check if already checked out today
-        const existing = await fetchFormRecords("Check_Out_Form");
+        const existing = await fetchFormRecords("Check_Out_Form_Report");
         const alreadyCheckedOut = existing.find(
             (r: any) =>
                 r.Worker === workerId &&
