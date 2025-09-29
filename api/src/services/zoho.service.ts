@@ -44,45 +44,39 @@ export async function addFormRecord(formName: string, record: Record<string, any
 
         const body = res.data;
 
-        // ✅ Case 1: New format { code, data, message }
+        // ✅ Success: new format
         if (body.code === 3000 && body.data?.ID) {
-            console.log(`✅ Zoho ${formName} record created:`, body.data.ID);
-            return {
-                success: true,
-                id: body.data.ID,
-                message: body.message,
-            };
+            return { success: true, id: body.data.ID, message: body.message };
         }
 
-        // ✅ Case 2: Old format { code, result: [ { code, data, message } ] }
+        // ✅ Success: old format
         if (body.code === 3000 && Array.isArray(body.result)) {
             const result = body.result[0];
             if (result.code === 3000) {
-                console.log(`✅ Zoho ${formName} record created:`, result.data.ID);
-                return {
-                    success: true,
-                    id: result.data.ID,
-                    message: result.message,
-                };
+                return { success: true, id: result.data.ID, message: result.message };
             }
+        }
+
+        // ❌ Failure with alerts
+        if (body.code === 3001 && body.error) {
+            const alert = body.error.find((e: any) => e.alert_message);
+            const message =
+                alert?.alert_message?.[0] || body.error[0]?.message || "Zoho form submission failed";
+            throw new Error(message);
         }
 
         throw new Error(`Unexpected Zoho response: ${JSON.stringify(body)}`);
     } catch (err: any) {
         if (err.response) {
             const { status, data } = err.response;
-
             if (status === 404) {
-                throw new Error(
-                    `Zoho API 404: Form "${formName}" not found. Check ZOHO_OWNER, ZOHO_APP, and form name.`
-                );
-            } else if (status === 401) {
-                throw new Error("Zoho API 401: Unauthorized. Check access token and credentials.");
-            } else {
-                throw new Error(`Zoho API ${status}: ${JSON.stringify(data)}`);
+                throw new Error(`Zoho API 404: Form "${formName}" not found.`);
             }
-        } else {
-            throw new Error(`Zoho request failed: ${err.message}`);
+            if (status === 401) {
+                throw new Error("Zoho API 401: Unauthorized. Check access token.");
+            }
+            throw new Error(data?.message || JSON.stringify(data));
         }
+        throw new Error(err.message);
     }
 }
