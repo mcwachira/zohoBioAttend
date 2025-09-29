@@ -37,31 +37,24 @@ async function getRecordIdByName(reportName: string, fieldName: string, value: s
 
 
 
-export const checkIn = async(req: Request, res: Response) => {
-
+export const checkIn = async (req: Request, res: Response) => {
     console.log("Check-in request received:", req.body);
-    try{
-        const { workerId, siteId, status, mode,qr_Code_Scanned } = req.body;
 
-        // Validate input
+    try {
+        const { workerId, siteId, status, mode, qr_Code_Scanned } = req.body;
+
         if (!workerId || !siteId) {
             return res.status(400).json({ status: "error", message: "Missing workerId or siteId" });
         }
 
-        console.log("Resolved IDs:", { workerId, siteId });
-
-
         const now = dayjs();
         const today = now.format("DD-MMM-YYYY");
-        // 1️⃣ Check if already checked in today
+
         const existing = await fetchFormRecords("Check_In_Form_Report");
         const alreadyCheckedIn = existing.find(
             (r: any) =>
-                r.Worker === workerId &&
-                r.Attendance_Date === today &&
-                r.Status === "Check In"
+                r.Worker === workerId && r.Attendance_Date === today && r.Status === "Check In"
         );
-
 
         if (alreadyCheckedIn) {
             return res.status(400).json({
@@ -69,82 +62,61 @@ export const checkIn = async(req: Request, res: Response) => {
                 message: "Worker already checked in today",
             });
         }
+
         const record = {
             Worker: workerId,
             Construction_Site: siteId,
             Status: status,
-            Mode: mode,       // lookup object
-            QR_Code_Scanned:qr_Code_Scanned,
-            Check_In_Time: now.format("DD-MMM-YYYY HH:mm:ss"),   // ✅ Correct Zoho time format
-            Attendance_Date: today
+            Mode: mode,
+            QR_Code_Scanned: qr_Code_Scanned,
+            Check_In_Time: now.format("DD-MMM-YYYY HH:mm:ss"),
+            Attendance_Date: today,
         };
-        console.log("record to be sent", record);
 
-        try {
-            // Send record to Zoho
-            const zohoResponse = await addFormRecord("Check_In_Form", record);
-            console.log("Zoho response:", zohoResponse);
-
-            return res.json({ status: "success", record });
-        } catch (zohoErr: any) {
-            // Log Zoho error and send detailed response
-            console.error("Zoho API error:", zohoErr || zohoErr);
-
-            return res.status(502).json({
-                status: "error",
-                message: "Failed to send record to Zoho",
-                details: zohoErr.response || zohoErr.message,
-            });
-        }
+        const zohoResponse = await addFormRecord("Check_In_Form", record);
+        return res.json({ status: "success", record, zohoResponse });
     } catch (err: any) {
-        console.error("Server error:", err);
+        console.error("CheckIn error:", err);
         return res.status(500).json({ status: "error", message: err.message });
     }
 };
 
-
 export const checkOut = async (req: Request, res: Response) => {
     try {
-        const { workerId,  status, mode, qr_Code_Scanned } = req.body;
+        const { workerId, status, mode, qr_Code_Scanned } = req.body;
 
-        // Validate input
         if (!workerId || !status) {
             return res.status(400).json({ status: "error", message: "Missing required fields" });
         }
 
-
         const now = dayjs();
         const today = now.format("DD-MMM-YYYY");
 
-        // 1️⃣ Check if already checked out today
         const existing = await fetchFormRecords("Check_Out_Form_Report");
         const alreadyCheckedOut = existing.find(
             (r: any) =>
-                r.Worker === workerId &&
-                r.Attendance_Date === today &&
-                r.Status === "Check Out"
+                r.Worker === workerId && r.Attendance_Date === today && r.Status === "Check Out"
         );
-
 
         if (alreadyCheckedOut) {
             return res.status(400).json({
                 status: "error",
-                message: "Worker already checked in today",
+                message: "Worker already checked out today",
             });
         }
+
         const record = {
             Worker: workerId,
             Status: status,
-            Mode: mode,       // lookup object
-            QR_Code_Scanned:qr_Code_Scanned,
-            Check_Out_Time: now.format("DD-MMM-YYYY HH:mm:ss"), // ✅ Correct Zoho time format
-            Attendance_Date:today,
+            Mode: mode,
+            QR_Code_Scanned: qr_Code_Scanned,
+            Check_Out_Time: now.format("DD-MMM-YYYY HH:mm:ss"),
+            Attendance_Date: today,
         };
 
-
-        await addFormRecord("Check_Out_Form", record);
-        res.json({ status: "success", record });
+        const zohoResponse = await addFormRecord("Check_Out_Form", record);
+        return res.json({ status: "success", record, zohoResponse });
     } catch (error: any) {
-        res.status(500).json({ status: "error", message: error.message });
+        return res.status(500).json({ status: "error", message: error.message });
     }
 };

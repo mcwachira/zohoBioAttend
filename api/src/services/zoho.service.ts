@@ -1,46 +1,39 @@
-import axios from 'axios';
-import {getZohoAccessToken}  from "../utils/token.util";
-
+import axios from "axios";
+import { getZohoAccessToken } from "../utils/token.util";
 
 const ZOHO_BASE_URL = "https://www.zohoapis.com/creator/v2.1";
-const ZOHO_OWNER = "wavemarkpropertieslimited"
+const ZOHO_OWNER = "wavemarkpropertieslimited";
 const ZOHO_APP = "attendance-management-system";
 
-
-//Fetch Records
-
-export async function  fetchFormRecords(reportName:string){
+// Fetch Records
+export async function fetchFormRecords(reportName: string) {
     const token = await getZohoAccessToken();
-
-    console.log(reportName)
     const url = `${ZOHO_BASE_URL}/data/${ZOHO_OWNER}/${ZOHO_APP}/report/${reportName}?max_records=200`;
 
     try {
         const res = await axios.get(url, {
             headers: {
                 Authorization: `Zoho-oauthtoken ${token}`,
-                Accept: "application/json",},
+                Accept: "application/json",
+            },
         });
-        // console.log("Zoho raw response:", JSON.stringify(res.data, null, 2));
-        return res.data.data;
+
+        return res.data.data; // ✅ standardized
     } catch (err: any) {
         console.error("Fetch error:", err.response?.data || err.message);
         throw err;
     }
 }
 
-//Add Form Record
+// Add Form Record
 export async function addFormRecord(formName: string, record: Record<string, any>) {
     const token = await getZohoAccessToken();
-    console.log(token)
-    console.log(formName)
-    console.log(record)
     const url = `${ZOHO_BASE_URL}/data/${ZOHO_OWNER}/${ZOHO_APP}/form/${formName}`;
 
     try {
         const res = await axios.post(
             url,
-            { data: [record] },
+            { data: record },
             {
                 headers: {
                     Authorization: `Zoho-oauthtoken ${token}`,
@@ -49,23 +42,22 @@ export async function addFormRecord(formName: string, record: Record<string, any
             }
         );
 
-        const result = res.data?.data?.[0];
+        const body = res.data;
 
-        if (!result) {
-            throw new Error(`Unexpected Zoho response: ${JSON.stringify(res.data)}`);
+        // ✅ Handle new Zoho Creator v2.1 response
+        if (body.code === 3000 && Array.isArray(body.result)) {
+            const result = body.result[0];
+            if (result.code === 3000) {
+                console.log(`✅ Zoho ${formName} record created:`, result.data.ID);
+                return {
+                    success: true,
+                    id: result.data.ID,
+                    message: result.message,
+                };
+            }
         }
 
-        if (result.code === "SUCCESS") {
-            console.log(`✅ Zoho ${formName} record created:`, result.details);
-            return result.details;
-        }
-
-        if (result.code === "ERROR") {
-            console.error("❌ Zoho field error:", result.message);
-            throw new Error(`Zoho API field error: ${JSON.stringify(result.message)}`);
-        }
-
-        return result;
+        throw new Error(`Unexpected Zoho response: ${JSON.stringify(body)}`);
     } catch (err: any) {
         if (err.response) {
             const { status, data } = err.response;
