@@ -18,7 +18,7 @@ export async function fetchFormRecords(reportName: string) {
             },
         });
 
-        return res.data.data; // ✅ standardized
+        return res.data.data;
     } catch (err: any) {
         console.error("Fetch error:", err.response?.data || err.message);
         throw err;
@@ -44,7 +44,17 @@ export async function addFormRecord(formName: string, record: Record<string, any
 
         const body = res.data;
 
-        // ✅ Handle new Zoho Creator v2.1 response
+        // ✅ Case 1: New format { code, data, message }
+        if (body.code === 3000 && body.data?.ID) {
+            console.log(`✅ Zoho ${formName} record created:`, body.data.ID);
+            return {
+                success: true,
+                id: body.data.ID,
+                message: body.message,
+            };
+        }
+
+        // ✅ Case 2: Old format { code, result: [ { code, data, message } ] }
         if (body.code === 3000 && Array.isArray(body.result)) {
             const result = body.result[0];
             if (result.code === 3000) {
